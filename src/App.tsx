@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { ChangeEvent } from "react";
+import CardList from "./components/CardList";
+import { robots } from "./robots";
+import SearchBox from "./components/SearchBox";
+import "./styles/App.css";
+import Scroll from "./components/Scroll";
 
 function App() {
+  const [robotList, setRobotList] = React.useState(robots);
+  const [search, setSearch] = React.useState("");
+
+  const onSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+    const filteredRobots = robots.filter((robots) => {
+      return robots.name.toLowerCase().includes(search);
+    });
+    setRobotList(filteredRobots);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="tc">
+      <h1 className="f1">RoboFriends</h1>
+      <SearchBox onSearchChange={onSearchChange} />
+      <Scroll>
+        <CardList robots={robotList} />
+      </Scroll>
     </div>
   );
 }
